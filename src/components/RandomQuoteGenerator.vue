@@ -16,24 +16,26 @@ const quotes = ref([
   }
 ])
 
-const currentQuote = ref({ text: '', author: '' })
+const currentQuote = ref({ content: '', author: '' })
 
-function getARandomQuote() {
-  const randomIndex = Math.floor(Math.random() * quotes.value.length)
-  currentQuote.value = quotes.value[randomIndex]
+async function getQuote() {
+  const result = await fetch('https://api.quotable.io/random')
+  const finalResult = await result.json()
+
+  currentQuote.value = finalResult
 }
 
-onMounted(getARandomQuote)
+onMounted(getQuote)
 </script>
 
 <template>
   <div class="quote-generator">
     <h1>Random Quote Generator</h1>
     <blockquote class="quote-container">
-      <p>{{ currentQuote.text }}</p>
+      <p>{{ currentQuote.content }}</p>
       <cite>{{ currentQuote.author }}</cite>
     </blockquote>
-    <button class="quote-button" @click="getARandomQuote">Pick a quote</button>
+    <button class="quote-button" @click="getQuote">Pick a quote</button>
   </div>
 </template>
 
